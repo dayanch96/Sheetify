@@ -1,45 +1,45 @@
 {
   "subheader": {
-    "message": "Сделано с ❤️"
+    "message": "Coded with ❤️"
   },
   "playbackModeHeader": {
-    "message": "Режим воспроизведения"
+    "message": "Playback mode"
   },
   "modeLoop": {
-    "message": "Зациклить"
+    "message": "Loop"
   },
   "modePause": {
-    "message": "Остановить"
+    "message": "Pause"
   },
   "remVolume": {
-    "message": "Запоминать громкость"
+    "message": "Remember volume"
   },
   "remPlaybackSpeed": {
-    "message": "Запоминать скорость"
+    "message": "Remember playback speed"
   },
   "reduceRefreshRate": {
-    "message": "Сократить частоту отрисовки"
+    "message": "Reduce redraw rate"
   },
   "hotkeysHeader": {
-    "message": "Горячие клавиши"
+    "message": "Hotkeys"
   },
   "hotkeysPlayPause": {
-    "message": "Воспроизведение/пауза"
+    "message": "Play/pause"
   },
   "hotkeysSeek": {
-    "message": "Перемотка"
+    "message": "Seek controls"
   },
   "hotkeysVolume": {
-    "message": "Громкость"
+    "message": "Volume controls"
   },
   "seekForwardTime": {
-    "message": "Перемотка вперёд (сек)"
+    "message": "Seek forward (sec)"
   },
   "seekBackwardTime": {
-    "message": "Перемотка назад (сек)"
+    "message": "Seek backward (sec)"
   },
   "contactsHeader": {
-    "message": "Контакты"
+    "message": "Contacts"
   },
   "twitter": {
     "message": "Twitter (X)"
@@ -51,18 +51,18 @@
     "message": "Github"
   },
   "email": {
-    "message": "Электронная почта"
+    "message": "Email"
   },
   "supportDevHeader": {
-    "message": "Поддержать разработку"
+    "message": "Support the development"
   },
   "buyMeCoffee": {
-    "message": "Угостить кофе"
+    "message": "Buy Me a Coffee"
   },
   "patreon": {
     "message": "Patreon"
   },
   "openSourceLibs": {
-    "message": "Используемые библиотеки"
+    "message": "Open-source libraries"
   }
 }
