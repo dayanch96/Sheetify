@@ -60,6 +60,7 @@
     progressColor: '#ff8c00',
     cursorColor: '#ff8c00',
     barWidth: 2,
+    barHeight: 0.8,
     barGap: 2,
     barRadius: 2,
     cursorWidth: 1,
@@ -310,28 +311,12 @@
           padding: 0 4px;
           margin-right: 20px;
         }
-        .play-pause-btn {
+        .play-pause-btn, .speed-btn {
           background: transparent;
           border: none;
           color: white;
           cursor: pointer;
-          padding: 4px;
-          width: 24px;
-          height: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .play-pause-btn img {
-          width: 16px;
-          height: 16px;
-          display: block;
-        }
-        .speed-btn {
-          background: transparent;
-          border: none;
-          color: white;
-          cursor: pointer;
+          clip-path: circle(50% at 50% 50%);
           padding: 4px;
           width: 24px;
           height: 24px;
@@ -340,9 +325,23 @@
           justify-content: center;
           font-size: 12px;
           font-weight: bold;
+          outline: none;
+        }
+        .play-pause-btn img {
+          width: 16px;
+          height: 16px;
+          display: block;
+        }
+        .play-pause-btn:hover, .play-pause-btn:focus-visible, .speed-btn:hover, .speed-btn:focus-visible {
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+          transition: background-color 0.2s ease;
+          outline: none;
         }
         .speed-menu {
           position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
           display: none;
           background: ${this.#config.playerBg};
           border-radius: 4px;
@@ -354,9 +353,11 @@
         }
         .speed-menu.above {
           bottom: 100%;
+          margin-bottom: 4px;
         }
         .speed-menu.below {
           top: 100%;
+          margin-top: 4px;
         }
         .speed-option {
           padding: 4px 8px;
@@ -391,11 +392,6 @@
           height: 14px;
           display: block;
         }
-        .play-pause-btn:hover, .speed-btn:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-          border-radius: 50%;
-          transition: background-color 0.2s ease;
-        }
       `;
     }
 
@@ -405,6 +401,7 @@
       img.src = svgPath;
       img.className = className;
       img.style.display = display;
+      img.draggable = false;
       return img;
     }
 
@@ -420,6 +417,7 @@
         playPauseBtn: document.createElement('button'),
         speedBtn: document.createElement('button'),
         speedMenu: document.createElement('div'),
+        speedWrapper: document.createElement('div'),
         closeBtn: document.createElement('button'),
         resizeCorner: document.createElement('div')
       };
@@ -435,6 +433,7 @@
         playPauseBtn: 'play-pause-btn',
         speedBtn: 'speed-btn',
         speedMenu: 'speed-menu',
+        speedWrapper: 'speed-wrapper',
         closeBtn: 'close-btn',
         resizeCorner: 'resize-corner'
       }).forEach(([key, className]) => {
@@ -484,8 +483,11 @@
         this.#elements.speedMenu.appendChild(option);
       });
 
-      this.#elements.controlsContainer.appendChild(this.#elements.speedBtn);
-      this.#elements.controlsContainer.appendChild(this.#elements.speedMenu);
+      const wrapper = this.#elements.speedWrapper;
+      wrapper.style.position = 'relative';
+      wrapper.style.display = 'flex';
+      wrapper.append(this.#elements.speedBtn, this.#elements.speedMenu);
+      this.#elements.controlsContainer.appendChild(wrapper);
     }
 
     #setupVolumeControl() {
@@ -613,6 +615,12 @@
     }
 
     createTimeDisplay() {
+      const oldCurrent = this.#elements.waveformContainer.querySelector('.wavesurfer-time.current');
+      const oldDuration = this.#elements.waveformContainer.querySelector('.wavesurfer-time.duration');
+
+      if (oldCurrent) oldCurrent.remove();
+      if (oldDuration) oldDuration.remove();
+
       const currentTimeEl = document.createElement('div');
       currentTimeEl.className = 'wavesurfer-time current';
       currentTimeEl.textContent = '0:00';
@@ -767,13 +775,21 @@
     }
 
     #setupSpeedControl() {
-      this.#ui.getElement('speedBtn').addEventListener('click', (e) => {
+      const speedBtn = this.#ui.getElement('speedBtn');
+      const speedMenu = this.#ui.getElement('speedMenu');
+
+      speedBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const rect = this.#ui.getElement('speedBtn').getBoundingClientRect();
-        this.#ui.showSpeedMenu(rect);
+
+        if (speedMenu.style.display === 'flex') {
+          this.#ui.hideSpeedMenu();
+        } else {
+          const rect = speedBtn.getBoundingClientRect();
+          this.#ui.showSpeedMenu(rect);
+        }
       });
 
-      this.#ui.getElement('speedMenu').querySelectorAll('.speed-option').forEach(option => {
+      speedMenu.querySelectorAll('.speed-option').forEach(option => {
         option.addEventListener('click', (e) => {
           e.stopPropagation();
           const speed = parseFloat(option.dataset.speed);
@@ -941,6 +957,7 @@
         progressColor: playerConfig.progressColor,
         cursorColor: playerConfig.cursorColor,
         barWidth: playerConfig.barWidth,
+        barHeight: playerConfig.barHeight,
         barGap: playerConfig.barGap,
         barRadius: playerConfig.barRadius,
         cursorWidth: playerConfig.cursorWidth,
@@ -1000,6 +1017,7 @@
 
       if (this.#wavesurfer.getMediaElement()?.src !== url) {
         const loadingIndicator = this.#ui.showLoadingIndicator();
+        this.#ui.createTimeDisplay();
 
         this.#wavesurfer.load(url);
         this.#wavesurfer.once('ready', () => {
