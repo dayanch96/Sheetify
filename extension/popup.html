@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sheetify settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f0f0f;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      width: 320px;
+      height: 400px;
+      user-select: none;
+    }
+    h1 {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+    .tabs {
+      margin: 0 10px;
+      display: flex;
+      background: #222;
+      border-radius: 12px;
+      overflow: hidden;
+      justify-content: space-around;
+      padding: 4px;
+    }
+    .tabs button {
+      padding: 8px 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      border-radius: 8px;
+      margin: 0 2px;
+    }
+    .tabs button:not(.active):hover {
+      background: #333;
+    }
+    .tabs button.active {
+      background: #FF8C00;
+      box-shadow: 0 2px 4px rgba(255, 140, 0, 0.3);
+    }
+    .tab-icon {
+      width: 18px;
+      height: 18px;
+      transition: all 0.3s ease;
+    }
+    .tabs button:not(.active) .tab-icon {
+      opacity: 0.7;
+      filter: grayscale(30%);
+    }
+    .tabs button.active .tab-icon {
+      filter: brightness(1.2);
+    }
+    .content {
+      margin-top: 15px;
+      padding: 10px;
+    }
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+    .settings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .settings-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 0px 12px;
+      height: 40px;
+      border-radius: 12px;
+      font-size: 15px;
+      user-select: none;
+    }
+    .settings-item .title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .settings-item .item-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      color: white;
+    }
+    .settings-item .title .icon {
+      width: 16px;
+      height: 16px;
+      opacity: 0.8;
+      flex-shrink: 0;
+    }
+    #support .settings-item .icon {
+      width: 16px;
+      height: 16px;
+    }
+    .hotkey-hint {
+      font-size: 10px;
+      color: #aaa;
+      font-weight: normal;
+      line-height: 1.2;
+    }
+    .segmented-control {
+      display: flex;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #222;
+      border: none;
+      user-select: none;
+      width: calc(100% - 6px);
+      height: 30px;
+      margin: 0 auto;
+      padding: 3px;
+      gap: 4px;
+    }
+    .segmented-control button {
+      flex: 1;
+      padding: 6px 10px;
+      border: none;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 13px;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      text-align: center;
+      min-width: 0;
+      white-space: nowrap;
+      text-shadow: 0 0 0 transparent;
+      transition: 
+        background-color 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease,
+        text-shadow 0.3s ease;
+    }
+    .segmented-control button:hover:not(.active) {
+      background: #333;
+      color: #fff;
+    }
+    .segmented-control button.active {
+      background: #FF8C00;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(255, 140, 0, 0.3);
+      text-shadow: 0 0 0.5px currentColor;
+    }
+    .segmented-control button:first-child {
+      margin-left: 0;
+    }
+    .segmented-control button:last-child {
+      margin-right: 0;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 22px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #555;
+      transition: 0.4s;
+      border-radius: 22px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #FF8C00;
+    }
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+    .number-input {
+      width: 25px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      border: none;
+      font-size: 13px;
+      background-color: #333;
+      color: white;
+      text-align: right;
+      user-select: text;
+    }
+    .number-input:focus {
+      outline: 2px solid #FF8C00;
+      background-color: #444;
+    }
+    .clickable {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .clickable:hover {
+      background: #333;
+    }
+    .accessoryView {
+      font-size: 13px;
+      color: #ccc;
+    }
+
+  </style>
+</head>
+<body>
+  <div style="text-align: center; margin-top: 20px;">
+    <img src="img/logo.png" alt="Sheetify Logo" style="width: 80px; height: auto; display: block; margin: 0 auto 10px;" />
+  </div>
+  <h1>Sheetify</h1>
+  <p id="version" style="text-align:center; font-size:12px; color:#aaa; margin-top:0;">
+    <span data-i18n="subheader"></span> • <span id="version-number">v?</span>
+  </p>
+
+  <div class="tabs">
+    <button id="btn-settings" class="active" title="Settings">
+      <img src="img/settings/gear.svg" class="tab-icon" alt="Settings">
+    </button>
+    <button id="btn-support" title="Support">
+      <img src="img/settings/heart.svg" class="tab-icon" alt="Support">
+    </button>
+    <button id="btn-about" title="About">
+      <img src="img/settings/info.svg" class="tab-icon" alt="About">
+    </button>
+  </div>
+
+  <div class="content">
+    <div id="settings" class="section active">
+      <h3 data-i18n="playbackModeHeader"></h3>
+      <div class="settings-list">
+        <div class="segmented-control" data-storage-key="playbackMode">
+          <button class="segment active" data-i18n="modeLoop" data-value="loop"></button>
+          <button class="segment" data-i18n="modePause" data-value="pause"></button>
+        </div>
+        <div class="settings-item">
+          <span class="title">
+            <span data-i18n="remVolume"></span>
+          </span>
+          <label class="switch">
+            <input type="checkbox" data-storage-key="rememberVolume" checked/>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <span class="title">
+            <span data-i18n="remPlaybackSpeed"></span>
+          </span>
+          <label class="switch">
+            <input type="checkbox" data-storage-key="rememberPlaybackSpeed" checked/>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <span class="title">
+            <span data-i18n="reduceRefreshRate"></span>
+          </span>
+          <label class="switch">
+            <input type="checkbox" data-storage-key="reduceRefreshRate" checked/>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <h3 data-i18n="hotkeysHeader"></h3>
+      <div class="settings-list">
+        <div class="settings-item">
+          <span class="title">
+            <span data-i18n="hotkeysPlayPause"></span>
+            <span class="hotkey-hint" data-hint-key="playPause"></span>
+          </span>
+          <label class="switch">
+            <input type="checkbox" data-storage-key="playPauseHotkeysEnabled" checked/>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <span class="title">
+            <span data-i18n="hotkeysSeek"></span>
+            <span class="hotkey-hint" data-hint-key="seek"></span>
+          </span>
+          <label class="switch">
+            <input type="checkbox" data-storage-key="seekHotkeysEnabled" checked/>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <span class="title">
+            <span data-i18n="hotkeysVolume"></span>
+            <span class="hotkey-hint" data-hint-key="volume"></span>
+          </span>
+          <label class="switch">
+            <input type="checkbox" data-storage-key="volumeHotkeysEnabled" checked/>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <span class="title" data-i18n="seekForwardTime"></span>
+          <input type="text" class="number-input" data-storage-key="forwardSeekTime" value="5"/>
+        </div>
+        <div class="settings-item">
+          <span class="title" data-i18n="seekBackwardTime"></span>
+          <input type="text" class="number-input" data-storage-key="backwardSeekTime" value="5"/>
+        </div>
+      </div>
+    </div>
+
+    <div id="support" class="section">
+      <h3 data-i18n="contactsHeader"></h3>
+        <div class="settings-list">
+        <div class="settings-item clickable" data-url="https://twitter.com/dayanch96">
+          <div class="item-label">
+            <img src="img/settings/twitter.svg" alt="Twitter" class="icon" />
+            <span class="title" data-i18n="twitter"></span>
+          </div>
+        </div>
+        <div class="settings-item clickable" data-url="https://discord.gg/VN9ZSeMhAA">
+          <div class="item-label">
+            <img src="img/settings/discord.svg" alt="discord" class="icon" />
+            <span class="title" data-i18n="discord"></span>
+          </div>
+        </div>
+        <div class="settings-item clickable" data-url="https://github.com/dayanch96/Sheetify">
+            <div class="item-label">
+              <img src="img/settings/github.svg" alt="Github" class="icon" />
+              <span class="title" data-i18n="github"></span>
+            </div>
+        </div>
+        <div class="settings-item clickable" data-url="mailto:dvntm96@gmail.com">
+            <div class="item-label">
+              <img src="img/settings/mail.svg" alt="Mail" class="icon" />
+              <span class="title" data-i18n="email"></span>
+            </div>
+        </div>
+        </div>
+
+        <h3 data-i18n="supportDevHeader"></h3>
+          <div class="settings-list">
+          <div class="settings-item clickable" data-url="https://coff.ee/dayanch96">
+            <div class="item-label">
+              <img src="img/settings/coffee.svg" alt="Buy me a coffee" class="icon" />
+              <span class="title" data-i18n="buyMeCoffee"></span>
+            </div>
+          </div>
+          <div class="settings-item clickable" data-url="https://patreon.com/dayanch96">
+            <div class="item-label">
+              <img src="img/settings/patreon.svg" alt="Patreon" class="icon" />
+              <span class="title" data-i18n="patreon"></span>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div id="about" class="section">
+      <h3 data-i18n="openSourceLibs"></h3>
+      <div class="settings-list">
+        <div class="settings-item clickable" data-url="https://wavesurfer.xyz">
+          <div class="item-label">
+            <span class="title">WaveSurfer.js</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

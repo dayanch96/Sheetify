@@ -1,0 +1,68 @@
+{
+  "subheader": {
+    "message": "Coded with ❤️"
+  },
+  "playbackModeHeader": {
+    "message": "Playback mode"
+  },
+  "modeLoop": {
+    "message": "Loop"
+  },
+  "modePause": {
+    "message": "Pause"
+  },
+  "remVolume": {
+    "message": "Remember volume"
+  },
+  "remPlaybackSpeed": {
+    "message": "Remember playback speed"
+  },
+  "reduceRefreshRate": {
+    "message": "Reduce redraw rate"
+  },
+  "hotkeysHeader": {
+    "message": "Hotkeys"
+  },
+  "hotkeysPlayPause": {
+    "message": "Play/pause"
+  },
+  "hotkeysSeek": {
+    "message": "Seek controls"
+  },
+  "hotkeysVolume": {
+    "message": "Volume controls"
+  },
+  "seekForwardTime": {
+    "message": "Seek forward (sec)"
+  },
+  "seekBackwardTime": {
+    "message": "Seek backward (sec)"
+  },
+  "contactsHeader": {
+    "message": "Contacts"
+  },
+  "twitter": {
+    "message": "Twitter (X)"
+  },
+  "discord": {
+    "message": "Discord"
+  },
+  "github": {
+    "message": "Github"
+  },
+  "email": {
+    "message": "Email"
+  },
+  "supportDevHeader": {
+    "message": "Support the development"
+  },
+  "buyMeCoffee": {
+    "message": "Buy Me a Coffee"
+  },
+  "patreon": {
+    "message": "Patreon"
+  },
+  "openSourceLibs": {
+    "message": "Open-source libraries"
+  }
+}

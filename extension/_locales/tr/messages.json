@@ -1,0 +1,68 @@
+{
+  "subheader": {
+    "message": "❤️ ile kodlandı"
+  },
+  "playbackModeHeader": {
+    "message": "Oynatma modu"
+  },
+  "modeLoop": {
+    "message": "Tekrar"
+  },
+  "modePause": {
+    "message": "Duraklat"
+  },
+  "remVolume": {
+    "message": "Ses seviyesini kaydet"
+  },
+  "remPlaybackSpeed": {
+    "message": "Oynatma hızını kaydet"
+  },
+  "reduceRefreshRate": {
+    "message": "Çizim sıklığını azalt"
+  },
+  "hotkeysHeader": {
+    "message": "Kısayollar"
+  },
+  "hotkeysPlayPause": {
+    "message": "Oynat/Duraklat"
+  },
+  "hotkeysSeek": {
+    "message": "İleri/Geri kontrolü"
+  },
+  "hotkeysVolume": {
+    "message": "Ses kontrolü"
+  },
+  "seekForwardTime": {
+    "message": "İleri atlama (sn)"
+  },
+  "seekBackwardTime": {
+    "message": "Geri atlama (sn)"
+  },
+  "contactsHeader": {
+    "message": "İletişim"
+  },
+  "twitter": {
+    "message": "Twitter (X)"
+  },
+  "discord": {
+    "message": "Discord"
+  },
+  "github": {
+    "message": "Github"
+  },
+  "email": {
+    "message": "E-posta"
+  },
+  "supportDevHeader": {
+    "message": "Geliştirmeye destek"
+  },
+  "buyMeCoffee": {
+    "message": "Bana bir kahve ısmarla"
+  },
+  "patreon": {
+    "message": "Patreon"
+  },
+  "openSourceLibs": {
+    "message": "Açık kaynak kütüphaneler"
+  }
+}
