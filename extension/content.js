@@ -8,7 +8,7 @@
     rememberVolume: true,
     rememberPlaybackSpeed: true,
     playPauseHotkeysEnabled: true,
-    reduceRefreshRate: true,
+    reduceRefreshRate: false,
     seekHotkeysEnabled: true,
     volumeHotkeysEnabled: true,
     forwardSeekTime: 5,
