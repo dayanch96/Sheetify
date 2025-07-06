@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Sheetify - Google Sheet Audio Player",
-  "version": "1.0",
+  "version": "1.1",
   "default_locale": "en",
   "description": "Play audio directly from links in Google Sheets.",
   "author": "Dan",
@@ -18,7 +18,7 @@
   "content_scripts": [
     {
       "matches": ["https://docs.google.com/spreadsheets/*"],
-      "js": ["lib/wavesurfer.min.js", "content.js"],
+      "js": ["lib/wavesurfer.js", "content.js"],
       "run_at": "document_end"
     }
   ],
