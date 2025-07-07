@@ -1,7 +1,7 @@
 # Sheetify - Google Sheet Audio Player
 
 <p align="center">
-<img src=media/logo.png/>
+  <img src="extension/img/logo.svg" width="256"/>
 </p>
 
 ## Screenshots
