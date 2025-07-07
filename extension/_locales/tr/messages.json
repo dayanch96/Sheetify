@@ -64,5 +64,8 @@
   },
   "openSourceLibs": {
     "message": "Açık kaynak kütüphaneler"
+  },
+  "failedToLoadAudio": {
+    "message": "Ses yüklenirken hata oluştu"
   }
 }

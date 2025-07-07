@@ -1,9 +1,6 @@
 (() => {
   'use strict';
 
-  const storage = (typeof browser !== 'undefined' && browser.storage) ? browser.storage.local : chrome.storage.local;
-  const runtime = (typeof browser !== 'undefined' && browser.runtime) ? browser.runtime : chrome.runtime;
-
   const cachedPS = {
     rememberVolume: true,
     rememberPlaybackSpeed: true,
@@ -18,7 +15,7 @@
 
   async function initCachedPS() {
     return new Promise((resolve) => {
-      storage.get(null, (items) => {
+      chrome.storage.local.get(null, (items) => {
         if (items) {
           if ('rememberVolume' in items) cachedPS.rememberVolume = items.rememberVolume;
           if ('rememberPlaybackSpeed' in items) cachedPS.rememberPlaybackSpeed = items.rememberPlaybackSpeed;
@@ -35,7 +32,7 @@
     });
   }
 
-  storage.onChanged.addListener((changes) => {
+  chrome.storage.onChanged.addListener((changes) => {
     for (const [key, { newValue }] of Object.entries(changes)) {
       if (key in cachedPS) {
         if (key.includes('Time')) {
@@ -71,7 +68,7 @@
   };
 
   class PlayerStateManager {
-    #storage = storage;
+    #storage = chrome.storage.local;
 
     async getSetting(key, defaultValue) {
       return new Promise((resolve) => {
@@ -304,6 +301,29 @@
           0% { transform: translate(-50%, -50%) rotate(0deg); }
           100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
+        .wavesurfer-error {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          max-width: 90%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          pointer-events: none;
+          background: #ff4d4d;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          padding: 10px;
+          border-radius: 8px;
+          z-index: 11;
+          text-align: center;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
         .controls {
           display: flex;
           gap: 4px;
@@ -397,7 +417,7 @@
 
     #createIcon(name, className = '', display = 'block') {
       const img = document.createElement('img');
-      const svgPath = runtime.getURL(`img/player/${name}.svg`);
+      const svgPath = chrome.runtime.getURL(`img/player/${name}.svg`);
       img.src = svgPath;
       img.className = className;
       img.style.display = display;
@@ -554,6 +574,25 @@
     hideLoadingIndicator(indicator) {
       indicator?.remove();
       this.#elements.waveformContainer.style.opacity = '1';
+    }
+
+    showErrorMessage(message) {
+      this.hideErrorMessage();
+
+      const text = chrome.i18n.getMessage(message) || message;
+      const errorElement = document.createElement('div');
+      errorElement.className = 'wavesurfer-error';
+      errorElement.textContent = text;
+      this.#elements.waveformContainer.appendChild(errorElement);
+
+      setTimeout(() => {
+        errorElement.style.opacity = '1';
+      }, 0);
+    }
+
+    hideErrorMessage() {
+      const existingErrors = this.#elements.waveformContainer.querySelectorAll('.wavesurfer-error');
+      existingErrors.forEach(el => el.remove());
     }
 
     showPlayer() {
@@ -948,9 +987,6 @@
         this.#wavesurfer = null;
       }
 
-      const loadingIndicator = this.#ui.showLoadingIndicator();
-      this.#ui.createTimeDisplay();
-
       this.#wavesurfer = WaveSurfer.create({
         container: this.#ui.getElement('waveformContainer'),
         waveColor: playerConfig.waveColor,
@@ -972,14 +1008,15 @@
         splitChannels: false
       });
 
+      this.#setupWaveSurferEvents();
+    }
+
+    #setupWaveSurferEvents() {
       this.#wavesurfer.setVolume(this.#currentVolume);
       this.#wavesurfer.setPlaybackRate(this.#currentSpeed);
 
-      this.#setupWaveSurferEvents(loadingIndicator);
-    }
-
-    #setupWaveSurferEvents(loadingIndicator) {
       this.#wavesurfer.on('ready', () => {
+        const loadingIndicator = this.#ui.showLoadingIndicator();
         this.#ui.hideLoadingIndicator(loadingIndicator);
         this.#ui.updateTimeDisplay(0, this.#wavesurfer.getDuration());
         this.#ui.updatePlayPauseIcons(this.#wavesurfer.isPlaying());
@@ -1011,16 +1048,19 @@
     }
 
     async loadAudio(url) {
-      if (!this.#wavesurfer) {
-        this.initWaveSurfer();
-      }
+      this.initWaveSurfer();
 
       if (this.#wavesurfer.getMediaElement()?.src !== url) {
         const loadingIndicator = this.#ui.showLoadingIndicator();
         this.#ui.createTimeDisplay();
 
-        this.#wavesurfer.load(url);
+        this.#wavesurfer.once('error', (error) => {
+          this.#ui.hideLoadingIndicator(loadingIndicator);
+          this.#ui.showErrorMessage('failedToLoadAudio');
+        });
+
         this.#wavesurfer.once('ready', () => {
+          this.#ui.hideErrorMessage();
           this.#ui.hideLoadingIndicator(loadingIndicator);
           this.#wavesurfer.setPlaybackRate(this.#currentSpeed);
           this.#wavesurfer.seekTo(0);
@@ -1030,6 +1070,8 @@
             this.updateWaveformSize();
           }, 0);
         });
+
+        this.#wavesurfer.load(url);
       } else if (this.#wavesurfer.isPlaying()) {
         this.#wavesurfer.pause();
       } else {

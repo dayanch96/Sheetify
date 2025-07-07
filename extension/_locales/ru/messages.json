@@ -64,5 +64,8 @@
   },
   "openSourceLibs": {
     "message": "Используемые библиотеки"
+  },
+  "failedToLoadAudio": {
+    "message": "Не удалось загрузить аудио"
   }
 }
