@@ -45,3 +45,4 @@
 
 ## Credits
 <li><a href="https://github.com/katspaugh/wavesurfer.js">WaveSurfer.js</a></li>
+<li><a href="https://fonts.google.com/specimen/Inter">Inter</a></li>

@@ -317,13 +317,13 @@
           color: white;
           cursor: pointer;
           clip-path: circle(50% at 50% 50%);
-          padding: 4px;
+          padding: 3px;
           width: 24px;
           height: 24px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 12px;
+          font-size: 11px;
           font-weight: bold;
           outline: none;
         }
