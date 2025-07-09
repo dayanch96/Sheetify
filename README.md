@@ -41,6 +41,13 @@
     <li>The extension will be loaded and ready to use immediately</li>
   </ol>
 </details>
+
+<details>
+  <summary>Firefox</summary>
+  <ol>
+    <li>Install via <a href="https://addons.mozilla.org/en-US/firefox/addon/sheetify-google-sheet-player">Mozilla Add-Ons</a></li>
+  </ol>
+</details>
 <br>
 
 ## Credits
