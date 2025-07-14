@@ -1031,6 +1031,10 @@
         this.#ui.updateTimeDisplay(this.#wavesurfer.getCurrentTime(), this.#wavesurfer.getDuration());
       });
 
+      this.#wavesurfer.on('click', () => {
+        this.#ui.updateTimeDisplay(this.#wavesurfer.getCurrentTime(), this.#wavesurfer.getDuration());
+      });
+
       this.#wavesurfer.on('finish', () => {
         this.#ui.updatePlayPauseIcons(false);
         this.#stateManager.getSetting('playbackMode', 'pause').then(mode => {
